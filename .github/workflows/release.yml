@@ -14,6 +14,9 @@ on:
         type: boolean
         default: false
 
+env:
+  REPO_NAME: ${{ github.repository_owner }}/rust-ci-test
+
 jobs:
   dry-run:
     name: check dry run
@@ -53,19 +56,15 @@ jobs:
 
   build:
     name: build release
-    runs-on: ${{ matrix.configs.os }}
+    runs-on: ${{ matrix.configs.runner }}
     needs: extract-version
     strategy:
       fail-fast: true
       matrix:
         configs:
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-24.04
-            profile: maxperf
-            allow_fail: false
-        build:
-          - command: build
-            binary: thing
+          - runner: warp-ubuntu-latest-x64-32x
+          - runner: warp-ubuntu-latest-arm64-32x
+
     steps:
       - uses: actions/checkout@v5
       - uses: rui314/setup-mold@v1
@@ -73,7 +72,7 @@ jobs:
         with:
           target: ${{ matrix.configs.target }}
       - name: Build Thing
-        run: make PROFILE=${{ matrix.configs.profile }} ${{ matrix.build.command }}-${{ matrix.configs.target }}
+        run: cargo build --verbose --workspace
       - name: Move binary
         run: |
           mkdir artifacts
@@ -174,6 +173,7 @@ jobs:
           | System | Architecture | Binary | PGP Signature |
           |:---:|:---:|:---:|:---|
           | <img src="https://www.svgrepo.com/download/473700/linux.svg" width="50"/> | x86_64 | [thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz.asc) |
+          | <img src="https://www.svgrepo.com/download/473700/linux.svg" width="50"/> | aarch64 | [thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz.asc) |
 
   dry-run-summary:
     name: dry run summary
