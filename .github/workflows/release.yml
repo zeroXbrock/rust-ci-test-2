@@ -63,10 +63,6 @@ jobs:
             os: ubuntu-24.04
             profile: maxperf
             allow_fail: false
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-24.04
-            profile: maxperf
-            allow_fail: false
         build:
           - command: build
             binary: thing
@@ -178,7 +174,6 @@ jobs:
           | System | Architecture | Binary | PGP Signature |
           |:---:|:---:|:---:|:---|
           | <img src="https://www.svgrepo.com/download/473700/linux.svg" width="50"/> | x86_64 | [thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz.asc) |
-          | <img src="https://www.svgrepo.com/download/473700/linux.svg" width="50"/> | aarch64 | [thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/thing-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz.asc) |
 
   dry-run-summary:
     name: dry run summary
