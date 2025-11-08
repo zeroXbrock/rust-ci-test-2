@@ -14,6 +14,9 @@ on:
         type: boolean
         default: false
 
+env:
+  REPO_NAME: ${{ github.repository_owner }}/rust-ci-test
+
 jobs:
   dry-run:
     name: check dry run
@@ -61,11 +64,7 @@ jobs:
         configs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
-            profile: maxperf
-            allow_fail: false
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-24.04
-            profile: maxperf
+            profile: release
             allow_fail: false
         build:
           - command: build
@@ -77,12 +76,11 @@ jobs:
         with:
           target: ${{ matrix.configs.target }}
       - name: Build Thing
-        run: make PROFILE=${{ matrix.configs.profile }} ${{ matrix.build.command }}-${{ matrix.configs.target }}
+        run: cargo build --verbose --workspace --release
       - name: Move binary
         run: |
           mkdir artifacts
-          [[ "${{ matrix.configs.target }}" == *windows* ]] && ext=".exe"
-          mv "target/${{ matrix.configs.target }}/${{ matrix.configs.profile }}/${{ matrix.build.binary }}${ext}" ./artifacts
+          mv "target/${{ matrix.configs.profile }}/${{ matrix.build.binary }}" ./artifacts
 
       - name: Configure GPG and create artifacts
         env:
