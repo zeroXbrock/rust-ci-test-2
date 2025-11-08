@@ -15,7 +15,7 @@ on:
         default: false
 
 env:
-  REPO_NAME: ${{ github.repository_owner }}/rust-ci-test
+  REPO_NAME: ${{ github.repository_owner }}/rust-ci-test-2
 
 jobs:
   dry-run:
