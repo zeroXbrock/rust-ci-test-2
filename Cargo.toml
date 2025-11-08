@@ -2,5 +2,8 @@
 resolver = "3"
 members = ["stuff", "thing"]
 
+[workspace.package]
+version = "0.1.0"
+
 [workspace.dependencies]
 stuff = { path = "stuff" }
